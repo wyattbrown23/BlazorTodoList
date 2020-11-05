@@ -1,0 +1,43 @@
+﻿@using BlazorTodoList.Models
+
+<h3>Items Remaining (@todoItems.Count(todo => !todo.IsDone))</h3>
+
+<table class="table table-bordered table-striped table-sm">
+    <thead>
+        <tr><th>Todo Item</th><th>Due Date</th><th>Completed</th></tr>
+    </thead>
+    <tbody>
+        @foreach (var item in todoItems)
+        {
+            <tr>
+                <td><input @bind="item.Name" /></td>
+                <td> @item.DueDate</td>
+                <td><input type="checkbox" @bind="item.IsDone" /></td>
+            </tr>            
+        }
+    </tbody>
+</table>
+
+
+<input placeholder="Enter Todo Item" @bind="itemName" />
+<input @bind-value="itemDueDate" type="date" />
+<button @onclick="AddItem">Add todo</button>
+
+@code {
+    private IList<TodoItem> todoItems = new List<TodoItem>();
+    private string itemName;
+    private DateTime itemDueDate;
+
+    private void AddItem()
+    {
+        if (!string.IsNullOrWhiteSpace(itemName))
+        {
+            todoItems.Add(new TodoItem
+            {
+                Name = itemName,
+                DueDate = itemDueDate
+            });
+            itemName = string.Empty;
+        }
+    }
+}
